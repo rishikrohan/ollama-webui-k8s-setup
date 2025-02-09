@@ -1,0 +1,30 @@
+repos:
+  # Shell Script Formatting
+  - repo: local
+    hooks:
+      - id: shfmt
+        name: shfmt
+        entry: shfmt -w -i 0
+        language: system
+        types: [shell]
+  # All environments
+  - repo: local
+    hooks:
+      - id: cspell
+        name: cspell
+        entry: cspell --quiet .
+        language: system
+        pass_filenames: false
+  - repo: local
+    hooks:
+      - id: markdownlint
+        name: markdownlint
+        entry: markdownlint . --ignore helm/charts/external
+        language: system
+        pass_filenames: false
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: prettier --write --ignore-unknown
+        language: system
