@@ -34,8 +34,6 @@ brew install helm
 brew install ngrok
 ```
 
-
-
 ## Setup Instructions
 
 ### Step 1: Create KIND Cluster
