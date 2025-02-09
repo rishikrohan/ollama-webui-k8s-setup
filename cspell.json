@@ -1,28 +1,24 @@
 {
-    // Version of the setting file.  Always 0.2
-    "version": "0.2",
-    // language - current active spelling language
-    "language": "en",
-    // words - list of words to be always considered correct
-    "words": [
-        "deepseek",
-        "nindent",
-        "ollama",
-        "openwebui",
-        "webui"
-    ],
-    // flagWords - list of words to be always considered incorrect
-    // This is useful for offensive words and common spelling errors.
-    // For example "hte" should be "the"
-    "flagWords": [
-        "hte"
-    ],
-    "ignorePaths": [],
-    "dictionaries": [
-        "bash",
-        "companies",
-        "softwareTerms",
-        "git",
-        "terraform"
-    ]
+  // Version of the setting file.  Always 0.2
+  "version": "0.2",
+  // language - current active spelling language
+  "language": "en",
+  // words - list of words to be always considered correct
+  "words": [
+    "deepseek",
+    "ngrok",
+    "nindent",
+    "ollama",
+    "openwebui",
+    "pkill",
+    "trunc",
+    "webui",
+    "hte"
+  ],
+  // flagWords - list of words to be always considered incorrect
+  // This is useful for offensive words and common spelling errors.
+  // For example "hte" should be "the"
+  "flagWords": [""],
+  "ignorePaths": [],
+  "dictionaries": ["bash", "companies", "softwareTerms", "git", "terraform"]
 }
