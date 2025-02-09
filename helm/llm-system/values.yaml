@@ -1,0 +1,57 @@
+# values.yaml
+namespace:
+  create: true
+  name: llm-system
+
+image:
+  repository: ollama/ollama
+  tag: latest
+  pullPolicy: IfNotPresent
+
+ollama:
+  port: 11434
+  models:
+    - name: "deepseek-r1:1.5b"
+    # Add more models if needed
+    # - name: "other-model:tag"
+  pullModelsOnStartup: true
+
+service:
+  type: NodePort
+  port: 11434
+  nodePort: 31434
+
+headlessService:
+  enabled: true
+
+openwebui:
+  enabled: true
+  config:
+    OPENAI_API_BASE: "http://ollama-service:11434/v1"
+    OPENAI_API_KEY: "ollama"
+    MODEL: "deepseek-r1:1.5b"
+
+resources:
+  requests:
+    memory: "8Gi"
+    cpu: "2"
+  limits:
+    memory: "12Gi"
+    cpu: "4"
+
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+securityContext: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

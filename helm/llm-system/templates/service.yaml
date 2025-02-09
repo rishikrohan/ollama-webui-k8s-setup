@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ollama-service
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "ollama.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.ollama.port }}
+      targetPort: {{ .Values.ollama.port }}
+      {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
+      nodePort: {{ .Values.service.nodePort }}
+      {{- end }}
+      protocol: TCP
+      name: api
+  selector:
+    app: ollama

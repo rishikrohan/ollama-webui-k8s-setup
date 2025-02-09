@@ -1,0 +1,63 @@
+# helm/llm-system/templates/deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ollama.fullname" . }}
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "ollama.labels" . | nindent 4 }}
+    app: ollama 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "ollama.selectorLabels" . | nindent 6 }}
+      app: ollama 
+  template:
+    metadata:
+      labels:
+        {{- include "ollama.selectorLabels" . | nindent 8 }}
+        app: ollama
+    spec:
+      {{- if and .Values.ollama.pullModelsOnStartup .Values.ollama.models }}
+      initContainers:
+        - name: model-pull
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          command:
+            - /bin/sh
+            - -c
+            - |
+              {{- range .Values.ollama.models }}
+              echo "Pulling model {{ .name }}..."
+              ollama pull {{ .name }}
+              {{- end }}
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.ollama.port }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - name: ollama-data
+              mountPath: /root/.ollama
+          {{- if and .Values.ollama.models }}
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - echo "Verifying models..." && ollama list
+          {{- end }}
+      volumes:
+        - name: ollama-data
+          persistentVolumeClaim:
+            claimName: {{ include "ollama.fullname" . }}-pvc

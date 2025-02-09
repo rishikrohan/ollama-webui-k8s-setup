@@ -1,0 +1,18 @@
+{{- if .Values.headlessService.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "ollama.fullname" . }}-headless
+  namespace: {{ .Values.namespace.name }}
+  labels:
+    {{- include "ollama.labels" . | nindent 4 }}
+spec:
+  clusterIP: None
+  ports:
+    - port: {{ .Values.ollama.port }}
+      targetPort: {{ .Values.ollama.port }}
+      protocol: TCP
+      name: api
+  selector:
+    app: ollama
+{{- end }}
